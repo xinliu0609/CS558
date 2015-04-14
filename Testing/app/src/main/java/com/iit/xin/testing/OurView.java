@@ -18,10 +18,6 @@ public class OurView extends SurfaceView implements Runnable{
     boolean goodToDraw = false;
 
     private Bitmap bitmap;
-
-    //private byte[] bytes = new byte[10000];
-    //private int imageLength = 0;
-
     private VideoStream vs;
 
     public OurView(Context context, VideoStream videoStream){
@@ -54,7 +50,7 @@ public class OurView extends SurfaceView implements Runnable{
             holder.unlockCanvasAndPost(canvas);
 
             try {
-                Thread.sleep(40);
+                Thread.sleep(20);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

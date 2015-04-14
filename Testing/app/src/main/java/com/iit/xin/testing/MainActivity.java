@@ -9,6 +9,7 @@ import android.view.MenuItem;
 public class MainActivity extends ActionBarActivity{
 
     private OurView v;
+    private ContentProvider cp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,13 +17,8 @@ public class MainActivity extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        VideoStream vs = null;
-
-        try {
-            vs = new VideoStream(getResources().openRawResource(R.raw.movie));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        cp = new ContentProvider(this);
+        VideoStream vs = cp.getVideoStream("movie");
 
         v = new OurView(this, vs);
         setContentView(v);
