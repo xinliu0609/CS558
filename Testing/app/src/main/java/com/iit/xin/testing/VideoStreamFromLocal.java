@@ -27,6 +27,7 @@ public class VideoStreamFromLocal extends VideoStream {
         length = Integer.parseInt(new String(header));
         //Log.d("tag0", "imageLength is "+length+" bytes");
         sourceInputStream.read(buffer, 0, length);
+        
         return BitmapFactory.decodeByteArray(buffer, 0, length);
     }
 }
