@@ -7,6 +7,8 @@ import java.net.MulticastSocket;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.wifi.WifiManager;
@@ -16,6 +18,7 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -28,18 +31,23 @@ public class MainActivity extends Activity {
     String ip = "224.0.0.251";
     String user = "spondob-tab";
     int port = 17012;
-
+    final Context context = this;
     InetAddress group;
     MulticastSocket s;
     MulticastLock lock;
-
+    private Button button;
     Bitmap image = null;
-
+    String vidname ="";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*LayoutInflater lif = LayoutInflater.from(context);
+        *//*AlertDialog.Builder ab = new AlertDialog.Builder(context);
+        View promptsView = lif.inflate(R.layout.dialogbox,null);
+        ab.setView(promptsView);
+        final EditText vidinput = (EditText) promptsView.findViewbyId(R.id.editTextDialogUserInput);
         setContentView(R.layout.activity_main);
-
+        button = (Button) findViewById(R.id.button);*/
         WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         lock = wifi.createMulticastLock("MainActivity");
         lock.setReferenceCounted(true);
@@ -57,6 +65,9 @@ public class MainActivity extends Activity {
         }
 
         receive();
+    }
+
+    private void setPositiveButton(String ok, Object p1) {
     }
 
     @Override

@@ -4,19 +4,21 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 
 public class MainActivity extends ActionBarActivity{
 
     private OurView v;
     private ContentProvider cp;
-
+    String vidname="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        EditText vid = (EditText)findViewById(R.id.editTextDialogUserInput);
+        vidname = vid.getText().toString();
         cp = new ContentProvider(this);
         VideoStream vs = cp.getVideoStream("movie");
 

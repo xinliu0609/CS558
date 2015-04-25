@@ -6,12 +6,13 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 
 /**
  * Created by xin on 4/7/15.
  */
 public class VideoStreamFromLocal extends VideoStream {
-
+    int count=0;
     public VideoStreamFromLocal(int identifier, Context context){
         this.sourceInputStream = context.getResources().openRawResource(identifier);
     }
@@ -25,9 +26,10 @@ public class VideoStreamFromLocal extends VideoStream {
 
         sourceInputStream.read(header, 0, 5);
         length = Integer.parseInt(new String(header));
+
+        Log.d("tag0", "imageLength is "+count+" bytes");
         //Log.d("tag0", "imageLength is "+length+" bytes");
         sourceInputStream.read(buffer, 0, length);
-        
         return BitmapFactory.decodeByteArray(buffer, 0, length);
     }
 }

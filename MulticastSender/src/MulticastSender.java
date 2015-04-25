@@ -9,7 +9,7 @@ public class MulticastSender {
     DatagramPacket outPacket = null;
     byte[] outBuf = new byte[10000];
     final int PORT = 17012;
-    
+    int count=0;    
     
     
     VideoStream vs = null;
@@ -31,21 +31,22 @@ public class MulticastSender {
       while (true) {
 
         int size = vs.getNextFrame(outBuf);
- 
+	count+=size; 
         //Send to multicast IP address and port
         InetAddress address = InetAddress.getByName("224.0.0.251");
         outPacket = new DatagramPacket(outBuf, outBuf.length,address, PORT);
-        
-        System.out.println("sending image");
+        //System.out.println(outBuf.length);
+        //System.out.println("sending image");
         socket.send(outPacket);
- 
         try {
           Thread.sleep(50);
         } catch (InterruptedException ie) {
         }
       }
-    } catch (IOException ioe) {
-      System.out.println(ioe);
+		
     }
+      catch (IOException ioe) {
+      System.out.println(ioe);
+    }	
   }
 }
