@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.concurrent.ExecutionException;
+
 
 public class MainActivity extends ActionBarActivity{
 
@@ -18,7 +20,21 @@ public class MainActivity extends ActionBarActivity{
         setContentView(R.layout.activity_main);
 
         cp = new ContentProvider(this);
-        VideoStream vs = cp.getVideoStream("movie");
+        String[] str = {"result"};
+
+        VideoStream vs = null;
+
+        try {
+            vs = cp.execute(str).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        if(vs == null){
+            // it's done, tell the user there's nothing we can do
+        }
 
         v = new OurView(this, vs);
         setContentView(v);

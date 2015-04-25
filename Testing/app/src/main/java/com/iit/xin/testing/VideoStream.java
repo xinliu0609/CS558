@@ -10,7 +10,7 @@ import java.io.InputStream;
 /**
  * Created by xin on 4/3/15.
  */
-public abstract class VideoStream {
+public abstract class VideoStream extends Thread{
     protected InputStream sourceInputStream;
     abstract public Bitmap getNextBitmap() throws IOException;
 }
