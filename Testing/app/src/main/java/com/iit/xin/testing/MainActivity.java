@@ -197,10 +197,19 @@ public class MainActivity extends ActionBarActivity{
                     //Log.d("tag", "Server has it !!!!!!!!!");
                     Toast.makeText(context,"Video "+name+" exists on server side",Toast.LENGTH_LONG).show();
 
-                    // start a new thread
+                    String broadcastAddr = "224.0.0.251";
+                    BlockingQueue<Bitmap> frameQueue = new ArrayBlockingQueue<Bitmap>(10);
+
+                    Thread t1 = new Thread(new RemoteStreaming(context, broadcastAddr, frameQueue));
+                    myView = new MyView(context, frameQueue);
+
+                    t1.start();
+
+                    setContentView(myView);
+                    myView.onResume();
+
                 }else{
-                    // it's all over!
-                    //Log.d("tag1", "Server doesn't have it !!!!1");
+
                     Toast.makeText(context,"Video "+name+" doesn't exists on server side",Toast.LENGTH_LONG).show();
                     dialog.dismiss();
                 }
