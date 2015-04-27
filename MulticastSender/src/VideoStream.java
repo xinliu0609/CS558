@@ -9,7 +9,6 @@ public class VideoStream {
 		fis = new FileInputStream(filename);
 		currentFrame = 0;
 	}
-	
 	public int getNextFrame(byte[] frame) throws Exception{
 		int length = 0;
 		String length_string;
@@ -17,7 +16,7 @@ public class VideoStream {
 		
 		fis.read(header, 0, 5);
 		length=Integer.parseInt(new String(header));
-		System.out.println("Image size is "+ length +" bytes");
+		//System.out.println("Image size is "+ length +" bytes");
 		return(fis.read(frame, 0, length));
 	}
 

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 
 /**
  * Created by xin on 4/7/15.
@@ -25,8 +26,14 @@ public class VideoStreamFromLocal extends VideoStream {
 
         sourceInputStream.read(header, 0, 5);
         length = Integer.parseInt(new String(header));
-        //Log.d("tag0", "imageLength is "+length+" bytes");
+
+        Log.d("tag0", "imageLength is "+length+" bytes");
         sourceInputStream.read(buffer, 0, length);
+
+        return BitmapFactory.decodeByteArray(buffer, 0, length);
+
+
+        /* experiment to see of the xor actually works
 
         byte[] b1 = new byte[buffer.length];
         byte[] mixed = new byte[buffer.length];
@@ -45,5 +52,8 @@ public class VideoStreamFromLocal extends VideoStream {
         }
 
         return BitmapFactory.decodeByteArray(new_buffer, 0, length);
+
+        */
+
     }
 }
