@@ -1,4 +1,4 @@
-package com.iit.xin.testing.shared;
+package com.iit.xin.testing;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.iit.xin.testing.IndexCodingPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -64,15 +66,11 @@ public class RemoteStreaming implements Runnable{
             try{
                 s.receive(packet);
 
-                IndexCodingPacket icPacket = (IndexCodingPacket)deserialize(packet.getData());
+                IndexPacket indexPacket = new IndexPacket(packet.getData());
+                String str = indexPacket.videoName;
 
-                String str1 = icPacket.videos[0];
-                long start = icPacket.startingByteNumber[0];
+                Log.d("tag0", "received video name"+str);
 
-
-                Toast.makeText(context, "Video name" + str1, Toast.LENGTH_LONG).show();
-                Log.d("tag0", "received video name"+str1);
-                Log.d("tag1", "received starting byte"+start);
 
                 /*
 
@@ -88,8 +86,6 @@ public class RemoteStreaming implements Runnable{
 
                 */
             } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
             /*

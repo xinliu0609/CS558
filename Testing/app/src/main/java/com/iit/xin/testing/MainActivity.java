@@ -1,4 +1,4 @@
-package com.iit.xin.testing.shared;
+package com.iit.xin.testing;
 
 import android.app.AlertDialog;
 import android.content.Context;

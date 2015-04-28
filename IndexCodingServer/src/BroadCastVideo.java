@@ -138,7 +138,11 @@ public class BroadCastVideo extends Thread{
 				IndexCodingPacket p = new IndexCodingPacket(s, l, len, payload);
 				
 				byte[] data = serialize(p);
-				outPacket = new DatagramPacket(data, data.length, address, PORT);
+				
+				IndexPacket packet = new IndexPacket("forward", payload);
+				byte[] send = packet.generate();
+				
+				outPacket = new DatagramPacket(send, send.length, address, PORT);
 								
 		        System.out.println("sending image");
 		        socket.send(outPacket);
