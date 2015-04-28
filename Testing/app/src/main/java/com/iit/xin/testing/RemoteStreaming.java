@@ -29,15 +29,18 @@ public class RemoteStreaming implements Runnable{
     final int PORT = 17012;
     BlockingQueue<Bitmap> blockingQueue;
 
+    String requestOne;
+
     InetAddress group;
     MulticastSocket s;
     WifiManager.MulticastLock lock;
     Bitmap image = null;
 
-    public RemoteStreaming(Context c, String s, BlockingQueue<Bitmap> frameQueue) {
+    public RemoteStreaming(Context c, String s, BlockingQueue<Bitmap> frameQueue, String string) {
         context = c;
         broadCastAddr = s;
         blockingQueue = frameQueue;
+        requestOne = string;
 
         WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
         lock = wifi.createMulticastLock("MainActivity");
@@ -58,47 +61,86 @@ public class RemoteStreaming implements Runnable{
             System.out.println(e.toString());
         }
 
-        byte[] buffer = new byte[15000];
-        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 
+        VideoStreamFromLocal vsl;
+
+        if(requestOne.equals("forward")){
+            vsl = new VideoStreamFromLocal("backward", context); //what i have
+        }else{
+            vsl = new VideoStreamFromLocal("forward", context); //what i have
+        }
+
+        int currentCacheFrame = 0;
+        int framelength;
+        int counter;
 
         while (true) {
+
+            byte[] buffer = new byte[15000];
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 
             try{
                 s.receive(packet);
 
-                while(packet == null){
-                    Thread.sleep(20);
-                    s.receive(packet);
+                byte[] data = packet.getData();
+
+                IndexPacket indexPacket = new IndexPacket(data);
+
+                if(requestOne.equals("forward")){
+                    framelength = indexPacket.frameLength[0];   //what i'm going to use
+                }else{
+                    framelength = indexPacket.frameLength[1];
                 }
 
-                byte[] data = packet.getData();
-                packet = null;
+                int framelength1 = indexPacket.frameLength[0];
+                int framelength2 = indexPacket.frameLength[1];
+
+                if(requestOne.equals("forward")){
+                    counter = indexPacket.byteCount[1];
+                }else{
+                    counter = indexPacket.byteCount[0];
+                }
+
+                int counter1 = indexPacket.byteCount[0];
+                int counter2 = indexPacket.byteCount[1];
+                byte[] mixed = indexPacket.payload;
+
 
                 /*
-                IndexPacket indexPacket = new IndexPacket(packet.getData());
-                packet = null;
-
-                int framelength1 = indexPacket.length_1;
-                int framelength2 = indexPacket.length_2;
-                byte[] mixed = indexPacket.payload;
-                byte[] side = indexPacket.side;
-
-
                 Log.d("tag0", "framelength1 is "+framelength1);
                 Log.d("tag1", "framelength2 is "+framelength2);
-                */
 
+                Log.d("tag2", "byte count 1 is "+counter1);
+                Log.d("tag2", "byte count 2 is "+counter2);
+                */
 
                 /*
-                VideoStreamFromLocal vsl = new VideoStreamFromLocal("backward", context);
+
                 byte[] cache = vsl.getNextByteArray();
+
+                byte[] trueByte = mix(mixed, cache);
+
+                image = BitmapFactory.decodeByteArray(trueByte, 0, framelength1);
+                blockingQueue.put(image);
+
                 */
 
+                while(currentCacheFrame < counter){
+                    vsl.getNextByteArray();
+                    currentCacheFrame++;
+                }
 
-                //image = BitmapFactory.decodeByteArray(trueByte, 0, framelength1);
-                //blockingQueue.put(image);
+                if(currentCacheFrame == counter){
+                    byte[] cache = vsl.getNextByteArray();
+                    byte[] trueByte = mix(mixed, cache);
+                    image = BitmapFactory.decodeByteArray(trueByte, 0, framelength);
+                    blockingQueue.put(image);
+                    currentCacheFrame++;
+                }
 
+                //else, do nothing
+
+                Thread.sleep(40);
 
             } catch (IOException e) {
                 e.printStackTrace();

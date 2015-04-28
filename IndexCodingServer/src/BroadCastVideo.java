@@ -78,9 +78,12 @@ public class BroadCastVideo extends Thread{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		String str1 = "forward";
+		String str2 = "backward";
 
-		long forwardCounter = 0;
-		long backwardCounter = 0;
+		int forwardCounter = 0;
+		int backwardCounter = 0;
 		
 		int forwardFrameLength = 0;
 		int backwardFrameLength = 0;
@@ -93,7 +96,7 @@ public class BroadCastVideo extends Thread{
 		//////////////////////////////////////////////////////////////////////////////////////////////
 
 		// send the udp packets
-		for(int i = 0; i < 10; i++){
+		for(int i = 0; i < 600; i++){
 			
 			try {
 		
@@ -123,18 +126,14 @@ public class BroadCastVideo extends Thread{
 				forwardFrameLength = forwardStream.getNextFrame(forwardBuffer);
 				backwardFrameLength = backwardStream.getNextFrame(backwardBuffer);
 				
-
 				byte[] mixed = mix(forwardBuffer, backwardBuffer);
-				//byte[] unmixed = mix(mixed, backwardBuffer);
-				//IndexPacket packet = new IndexPacket(forwardFrameLength, backwardFrameLength, mixed, backwardBuffer);
-				//byte[] send = packet.generate();
 				
-				IndexCodingPacket icp = new IndexCodingPacket(forwardFrameLength, backwardFrameLength, mixed);
+				IndexPacket packet = new IndexPacket(forwardFrameLength, backwardFrameLength, forwardCounter, backwardCounter, mixed);
 				
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				ObjectOutputStream oout = new ObjectOutputStream(out);
-				oout.writeObject(icp);
-				byte[] data = out.toByteArray();
+				forwardCounter++;
+				backwardCounter++;
+				
+				byte[] data = packet.generate();
 				
 				outPacket = new DatagramPacket(data, data.length, address, PORT);
 								

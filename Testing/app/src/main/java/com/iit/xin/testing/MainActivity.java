@@ -18,12 +18,17 @@ import com.iit.xin.testing.R;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.ByteOrder;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
 
+import static java.nio.ByteOrder.*;
+
 
 public class MainActivity extends ActionBarActivity{
+
+
 
     final Context context = this;
     MyView myView;
@@ -34,6 +39,8 @@ public class MainActivity extends ActionBarActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -198,7 +205,7 @@ public class MainActivity extends ActionBarActivity{
                     String broadcastAddr = "224.0.0.251";
                     BlockingQueue<Bitmap> frameQueue = new ArrayBlockingQueue<Bitmap>(10);
 
-                    Thread t1 = new Thread(new RemoteStreaming(context, broadcastAddr, frameQueue));
+                    Thread t1 = new Thread(new RemoteStreaming(context, broadcastAddr, frameQueue, name));
                     myView = new MyView(context, frameQueue);
 
                     t1.start();
