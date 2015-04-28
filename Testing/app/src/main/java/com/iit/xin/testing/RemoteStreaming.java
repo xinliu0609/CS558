@@ -11,6 +11,7 @@ import com.iit.xin.testing.IndexCodingPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -66,33 +67,46 @@ public class RemoteStreaming implements Runnable{
             try{
                 s.receive(packet);
 
-                IndexPacket indexPacket = new IndexPacket(packet.getData());
-                String str = indexPacket.videoName;
+                while(packet == null){
+                    Thread.sleep(20);
+                    s.receive(packet);
+                }
 
-                Log.d("tag0", "received video name"+str);
+                byte[] data = packet.getData();
+                packet = null;
+
+                /*
+                IndexPacket indexPacket = new IndexPacket(packet.getData());
+                packet = null;
+
+                int framelength1 = indexPacket.length_1;
+                int framelength2 = indexPacket.length_2;
+                byte[] mixed = indexPacket.payload;
+                byte[] side = indexPacket.side;
+
+
+                Log.d("tag0", "framelength1 is "+framelength1);
+                Log.d("tag1", "framelength2 is "+framelength2);
+                */
 
 
                 /*
-
-                image = BitmapFactory.decodeByteArray(data.getData(), 0, data.getLength());
-
-                while(image == null){
-                    Thread.sleep(20);
-                    s.receive(data);
-                    image = BitmapFactory.decodeByteArray(data.getData(), 0, data.getLength());
-                }
-
-                blockingQueue.put(image);
-
+                VideoStreamFromLocal vsl = new VideoStreamFromLocal("backward", context);
+                byte[] cache = vsl.getNextByteArray();
                 */
+
+
+                //image = BitmapFactory.decodeByteArray(trueByte, 0, framelength1);
+                //blockingQueue.put(image);
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            /*
+
             catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            */
         }
     }
 
@@ -100,5 +114,16 @@ public class RemoteStreaming implements Runnable{
         ByteArrayInputStream in = new ByteArrayInputStream(data);
         ObjectInputStream is = new ObjectInputStream(in);
         return is.readObject();
+    }
+
+    public static byte[] mix(byte[] b1, byte[] b2){
+
+        byte[] mixed = new byte[b1.length];
+
+        int i = 0;
+        for(byte b : b1){
+            mixed[i] = (byte)(0xff & (int)b ^ (int)b2[i++]);
+        }
+        return mixed;
     }
 }

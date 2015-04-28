@@ -19,6 +19,25 @@ public class VideoStreamFromLocal{
         this.sourceInputStream = context.getResources().openRawResource(identifier);
     }
 
+    public VideoStreamFromLocal(String str, Context context){
+        int id = context.getResources().getIdentifier(str, "raw", context.getPackageName());
+        this.sourceInputStream = context.getResources().openRawResource(id);
+    }
+
+    public byte[] getNextByteArray() throws IOException{
+        int length;
+        byte[] header = new byte[5];
+        byte[] buffer = new byte[15000];
+
+        sourceInputStream.read(header, 0, 5);
+        length = Integer.parseInt(new String(header));
+
+        Log.d("tag0", "imageLength is "+length+" bytes");
+        sourceInputStream.read(buffer, 0, length);
+
+        return buffer;
+    }
+
     public Bitmap getNextBitmap() throws IOException {
 
         int length;
@@ -32,29 +51,5 @@ public class VideoStreamFromLocal{
         sourceInputStream.read(buffer, 0, length);
 
         return BitmapFactory.decodeByteArray(buffer, 0, length);
-
-
-        /* experiment to see of the xor actually works
-
-        byte[] b1 = new byte[buffer.length];
-        byte[] mixed = new byte[buffer.length];
-
-        // mixed = buffer xor b1
-        int i = 0;
-        for(byte b : buffer){
-            mixed[i] = (byte)(0xff & (int)b ^ (int)b1[i++]);
-        }
-
-        // new_buffer = mixed xor b1
-        byte[] new_buffer = new byte[buffer.length];
-        int j = 0;
-        for(byte b : mixed){
-            new_buffer[j] = (byte)(0xff & (int)b ^ (int)b1[j++]);
-        }
-
-        return BitmapFactory.decodeByteArray(new_buffer, 0, length);
-
-        */
-
     }
 }

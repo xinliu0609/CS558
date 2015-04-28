@@ -93,7 +93,7 @@ public class BroadCastVideo extends Thread{
 		//////////////////////////////////////////////////////////////////////////////////////////////
 
 		// send the udp packets
-		for(int i = 0; i < 5; i++){
+		for(int i = 0; i < 10; i++){
 			
 			try {
 		
@@ -123,26 +123,20 @@ public class BroadCastVideo extends Thread{
 				forwardFrameLength = forwardStream.getNextFrame(forwardBuffer);
 				backwardFrameLength = backwardStream.getNextFrame(backwardBuffer);
 				
-				int index = 0;
-				for(byte b : forwardBuffer){
-					payload[index] = (byte)(0xff & (int)b ^ (int)backwardBuffer[index++]);
-				}
+
+				byte[] mixed = mix(forwardBuffer, backwardBuffer);
+				//byte[] unmixed = mix(mixed, backwardBuffer);
+				//IndexPacket packet = new IndexPacket(forwardFrameLength, backwardFrameLength, mixed, backwardBuffer);
+				//byte[] send = packet.generate();
 				
-				String[] s = {"forward", "backward"};
-				long[] l = {forwardCounter, backwardCounter};
-				int[] len = {forwardFrameLength, backwardFrameLength};
+				IndexCodingPacket icp = new IndexCodingPacket(forwardFrameLength, backwardFrameLength, mixed);
 				
-				forwardCounter += (forwardFrameLength+5);
-				backwardCounter += (backwardFrameLength+5);
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				ObjectOutputStream oout = new ObjectOutputStream(out);
+				oout.writeObject(icp);
+				byte[] data = out.toByteArray();
 				
-				IndexCodingPacket p = new IndexCodingPacket(s, l, len, payload);
-				
-				byte[] data = serialize(p);
-				
-				IndexPacket packet = new IndexPacket("forward", payload);
-				byte[] send = packet.generate();
-				
-				outPacket = new DatagramPacket(send, send.length, address, PORT);
+				outPacket = new DatagramPacket(data, data.length, address, PORT);
 								
 		        System.out.println("sending image");
 		        socket.send(outPacket);
@@ -161,5 +155,17 @@ public class BroadCastVideo extends Thread{
 	    ObjectOutputStream os = new ObjectOutputStream(out);
 	    os.writeObject(obj);
 	    return out.toByteArray();
+	}
+	
+	public static byte[] mix(byte[] b1, byte[] b2){
+		
+		byte[] mixed = new byte[b1.length];
+		
+		int i = 0;
+		for(byte b : b1){
+			mixed[i] = (byte)(0xff & (int)b ^ (int)b2[i++]);
+		}
+		
+		return mixed;
 	}
 }

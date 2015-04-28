@@ -49,11 +49,6 @@ public class Driver {
 		// get each row of the COMPLETED matrix
 		// send these information to the following function
 		
-		for(String s : requestVideoList){
-			System.out.println("List content: "+s);
-		}
-		
-		
 		try {
 			new BroadCastVideo(requestVideoList).start();
 		} catch (Exception e) {
