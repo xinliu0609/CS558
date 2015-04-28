@@ -1,7 +1,5 @@
 /BroadCastVideo.class
 /Driver.class
+/IndexCodingPacket.class
 /ResponseInquiry.class
 /VideoStream.class
-/IndexCodingPacket.class
-/IndexCodingPacket$videoInfo.class
-/shared/
