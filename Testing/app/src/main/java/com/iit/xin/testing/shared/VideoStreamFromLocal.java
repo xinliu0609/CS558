@@ -1,4 +1,4 @@
-package com.iit.xin.testing;
+package com.iit.xin.testing.shared;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,13 +11,14 @@ import java.lang.reflect.Array;
 /**
  * Created by xin on 4/7/15.
  */
-public class VideoStreamFromLocal extends VideoStream {
+public class VideoStreamFromLocal{
+
+    InputStream sourceInputStream;
 
     public VideoStreamFromLocal(int identifier, Context context){
         this.sourceInputStream = context.getResources().openRawResource(identifier);
     }
 
-    @Override
     public Bitmap getNextBitmap() throws IOException {
 
         int length;

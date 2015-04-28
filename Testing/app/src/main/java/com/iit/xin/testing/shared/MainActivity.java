@@ -1,4 +1,4 @@
-package com.iit.xin.testing;
+package com.iit.xin.testing.shared;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,9 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
+import com.iit.xin.testing.R;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.ArrayBlockingQueue;

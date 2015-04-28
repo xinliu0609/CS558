@@ -1,4 +1,4 @@
-package com.iit.xin.testing;
+package com.iit.xin.testing.shared;
 
 import android.content.Context;
 import android.graphics.Bitmap;
