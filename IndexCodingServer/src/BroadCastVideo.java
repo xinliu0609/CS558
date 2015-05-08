@@ -96,7 +96,7 @@ public class BroadCastVideo extends Thread{
 		//////////////////////////////////////////////////////////////////////////////////////////////
 
 		// send the udp packets
-		for(int i = 0; i < 600; i++){
+		for(int i = 0; i < 500; i++){
 			
 			try {
 		

@@ -92,38 +92,14 @@ public class RemoteStreaming implements Runnable{
                     framelength = indexPacket.frameLength[1];
                 }
 
-                int framelength1 = indexPacket.frameLength[0];
-                int framelength2 = indexPacket.frameLength[1];
-
                 if(requestOne.equals("forward")){
                     counter = indexPacket.byteCount[1];
                 }else{
                     counter = indexPacket.byteCount[0];
                 }
 
-                int counter1 = indexPacket.byteCount[0];
-                int counter2 = indexPacket.byteCount[1];
                 byte[] mixed = indexPacket.payload;
 
-
-                /*
-                Log.d("tag0", "framelength1 is "+framelength1);
-                Log.d("tag1", "framelength2 is "+framelength2);
-
-                Log.d("tag2", "byte count 1 is "+counter1);
-                Log.d("tag2", "byte count 2 is "+counter2);
-                */
-
-                /*
-
-                byte[] cache = vsl.getNextByteArray();
-
-                byte[] trueByte = mix(mixed, cache);
-
-                image = BitmapFactory.decodeByteArray(trueByte, 0, framelength1);
-                blockingQueue.put(image);
-
-                */
 
                 while(currentCacheFrame < counter){
                     vsl.getNextByteArray();

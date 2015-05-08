@@ -30,7 +30,7 @@ public class Driver {
 			e.printStackTrace();
 		}
 		
-		while(numberOfClient < 1){
+		while(numberOfClient < 2){
 			
 			client = serverSocket.accept();
 			System.out.println("Received a connection from client");	
